@@ -88,4 +88,11 @@ describe("Notes view", () => {
 
     expect(error[0].innerText).toBe("Oops, something went wrong!");
   });
+
+  it("deletes all notes after button click", () => {
+    const button = document.querySelector("#delete-notes-button");
+    button.click();
+
+    expect(notesClient.deleteNotes).toHaveBeenCalled();
+  });
 });

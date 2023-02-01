@@ -4,12 +4,19 @@ class NotesView {
     this.client = client;
     this.mainContainerEl = document.querySelector("#main-container");
     this.addNoteButton = document.querySelector("#add-note-button");
+    this.deleteButton = document.querySelector("#delete-notes-button");
     this.noteInput = document.querySelector("#note-input");
 
     this.addNoteButton.addEventListener("click", () => {
       const newNote = document.querySelector("#note-input").value;
       this.addNewNote(newNote);
       this.noteInput.value = "";
+    });
+
+    this.deleteButton.addEventListener("click", () => {
+      this.client.deleteNotes((error) => this.displayError(error));
+      this.model.reset();
+      this.displayNotes();
     });
   }
 
@@ -52,6 +59,12 @@ class NotesView {
     errorMessage.className = "error";
     errorMessage.innerText = error;
     this.mainContainerEl.append(errorMessage);
+  }
+
+  removeNotes() {
+    this.mainContainerEl
+      .querySelectorAll("div.note")
+      .forEach((note) => note.remove());
   }
 }
 

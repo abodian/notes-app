@@ -6,6 +6,9 @@ const Client = require("./notesClient");
 require("jest-fetch-mock").enableMocks();
 
 describe("Client class", () => {
+  beforeEach(() => {
+    fetch.mockReset();
+  });
   it("calls fetch and loads data", (done) => {
     // 1. Instantiate the class
     const client = new Client();
@@ -56,5 +59,27 @@ describe("Client class", () => {
       body: JSON.stringify({ content: note }),
     });
     done();
+  });
+
+  it("sends a post request to the notes server to delete notes", () => {
+    fetch.mockResponseOnce("");
+
+    const client = new Client();
+
+    client.deleteNotes();
+
+    expect(fetch).toHaveBeenCalledWith("http://localhost:3000/notes", {
+      method: "DELETE",
+    });
+  });
+
+  it("promise resolves with error for deleteNotes", (done) => {
+    fetch.mockRejectedValue("Oops, something went wrong");
+
+    const client = new Client();
+    client.deleteNotes((error) => {
+      expect(error).toBe("Oops, something went wrong");
+      done();
+    });
   });
 });
