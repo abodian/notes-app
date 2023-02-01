@@ -29,7 +29,9 @@ class NotesView {
 
   addNewNote(newNote) {
     this.model.addNote(newNote);
-    this.client.createNote(newNote);
+    this.client.createNote(newNote, () => {
+      this.displayError("Oops, something went wrong with submitting a note!");
+    });
     this.displayNotes();
   }
 
